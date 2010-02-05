@@ -1,5 +1,9 @@
 require "xmpp_manager"
 
+open("xmpp_manager.pid", "w") do |f|
+  f.write(Process.pid)
+end
+
 manager = XmppManager.new("username@jabber_server", "password", :debug => true)
 
 manager.add_callback("soma") do |manager, url|
