@@ -23,11 +23,14 @@ class XmppManager
     @client.auth(@password)
     @client.send(Presence.new.set_type(:available))
     @client.add_message_callback do |message|
-      @callbacks.each do |name, callback|
-        if message.body[0, name.length] == name
-          params = message.body[(name.length + 1)..-1].split(/ +/).map { |param| param.strip }
-          callback.call(self, *params)
+      if message.body
+        @callbacks.each do |name, callback|
+          if message.body[0, name.length] == name
+            params = message.body[name.length..-1].strip.split(/ +/)
+            callback.call(self, *params)
+          end
         end
+        debug(message.body)
       end
       debug(message)
     end
