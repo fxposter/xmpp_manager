@@ -13,8 +13,14 @@ class XmppManager
   end
 
   def add_callback(name, &callback)
+    name = name.to_s
     @callbacks[name] = callback
     self
+  end
+  
+  def run_callback(name, *args)
+    name = name.to_s
+    @callbacks[name].call(*args) if @callbacks[name]
   end
   
   def start
@@ -38,7 +44,7 @@ class XmppManager
   end
   
   def stop
-    @client.stop
+    @client.stop if @client
   end
   
 private
